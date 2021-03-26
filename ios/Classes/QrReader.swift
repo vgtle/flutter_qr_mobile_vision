@@ -220,7 +220,7 @@ extension QrReader: AVCaptureVideoDataOutputSampleBufferDelegate {
         }
                 
         for feature in features {
-            self.qrCallback("ReturnFormat.DISPLAY".compare(returnValueType, options: .caseInsensitive) == .orderedSame ? feature.displayValue! : feature.rawValue!)
+            self.qrCallback("ReturnFormats.DISPLAY".compare(returnValueType, options: .caseInsensitive) == .orderedSame ? feature.displayValue! : feature.rawValue!)
         }
       }
     }

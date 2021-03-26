@@ -29,9 +29,9 @@ enum BarcodeFormats {
   UPC_E,
 }
 
-enum ReturnFormat { RAW, DISPLAY }
+enum ReturnFormats { RAW, DISPLAY }
 
-const _defaultReturnFormat = ReturnFormat.RAW;
+const _defaultReturnFormat = ReturnFormats.RAW;
 const _defaultBarcodeFormats = const [
   BarcodeFormats.ALL_FORMATS,
 ];
@@ -47,7 +47,7 @@ class QrMobileVision {
     required int height,
     required QRCodeHandler qrCodeHandler,
     List<BarcodeFormats>? formats = _defaultBarcodeFormats,
-    ReturnFormat returnValueType = _defaultReturnFormat,
+    ReturnFormats? returnValueType = _defaultReturnFormat,
   }) async {
     final _formats = formats ?? _defaultBarcodeFormats;
     assert(_formats.length > 0);

@@ -21,7 +21,7 @@ import java.util.List;
 
 class QrDetector implements OnSuccessListener<List<Barcode>>, OnFailureListener {
     private static final String TAG = "cgr.qrmv.QrDetector";
-    private static final String RETURN_TYPE_DISPLAY = "ReturnFormat.DISPLAY";
+    private static final String RETURN_TYPE_DISPLAY = "ReturnFormats.DISPLAY";
     private final QrReaderCallbacks communicator;
     private final BarcodeScanner detector;
     private final String returnValueType;
