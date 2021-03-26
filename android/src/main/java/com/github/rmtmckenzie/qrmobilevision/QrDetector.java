@@ -21,8 +21,10 @@ import java.util.List;
 
 class QrDetector implements OnSuccessListener<List<Barcode>>, OnFailureListener {
     private static final String TAG = "cgr.qrmv.QrDetector";
+    private static final String RETURN_TYPE_DISPLAY = "ReturnFormat.DISPLAY";
     private final QrReaderCallbacks communicator;
     private final BarcodeScanner detector;
+    private final String returnValueType;
 
     public interface Frame {
         InputImage toImage();
@@ -36,9 +38,10 @@ class QrDetector implements OnSuccessListener<List<Barcode>>, OnFailureListener 
     @GuardedBy("this")
     private Frame processingFrame;
 
-    QrDetector(QrReaderCallbacks communicator, BarcodeScannerOptions options) {
+    QrDetector(QrReaderCallbacks communicator, BarcodeScannerOptions options, String returnValueType) {
         this.communicator = communicator;
         this.detector = BarcodeScanning.getClient(options);
+        this.returnValueType = returnValueType;
     }
 
     void detect(Frame frame) {
@@ -77,7 +80,7 @@ class QrDetector implements OnSuccessListener<List<Barcode>>, OnFailureListener 
     @Override
     public void onSuccess(List<Barcode> firebaseVisionBarcodes) {
         for (Barcode barcode : firebaseVisionBarcodes) {
-            communicator.qrRead(barcode.getDisplayValue());
+            communicator.qrRead(RETURN_TYPE_DISPLAY.equalsIgnoreCase(returnValueType) ? barcode.getDisplayValue() : barcode.getRawValue());
         }
         processLatest();
     }

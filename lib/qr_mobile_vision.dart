@@ -8,7 +8,8 @@ class PreviewDetails {
   num? sensorOrientation;
   int? textureId;
 
-  PreviewDetails(this.width, this.height, this.sensorOrientation, this.textureId);
+  PreviewDetails(
+      this.width, this.height, this.sensorOrientation, this.textureId);
 }
 
 enum BarcodeFormats {
@@ -28,12 +29,16 @@ enum BarcodeFormats {
   UPC_E,
 }
 
+enum ReturnFormat { RAW, DISPLAY }
+
+const _defaultReturnFormat = ReturnFormat.RAW;
 const _defaultBarcodeFormats = const [
   BarcodeFormats.ALL_FORMATS,
 ];
 
 class QrMobileVision {
-  static const MethodChannel _channel = const MethodChannel('com.github.rmtmckenzie/qr_mobile_vision');
+  static const MethodChannel _channel =
+      const MethodChannel('com.github.rmtmckenzie/qr_mobile_vision');
   static QrChannelReader channelReader = QrChannelReader(_channel);
 
   //Set target size before starting
@@ -42,11 +47,14 @@ class QrMobileVision {
     required int height,
     required QRCodeHandler qrCodeHandler,
     List<BarcodeFormats>? formats = _defaultBarcodeFormats,
+    ReturnFormat returnValueType = _defaultReturnFormat,
   }) async {
     final _formats = formats ?? _defaultBarcodeFormats;
     assert(_formats.length > 0);
 
-    List<String> formatStrings = _formats.map((format) => format.toString().split('.')[1]).toList(growable: false);
+    List<String> formatStrings = _formats
+        .map((format) => format.toString().split('.')[1])
+        .toList(growable: false);
 
     channelReader.setQrCodeHandler(qrCodeHandler);
     var details = await _channel.invokeMethod('start', {
@@ -54,6 +62,7 @@ class QrMobileVision {
       'targetHeight': height,
       'heartbeatTimeout': 0,
       'formats': formatStrings,
+      'returnValueType': returnValueType.toString(),
     });
 
     // invokeMethod returns Map<dynamic,...> in dart 2.0
@@ -77,7 +86,8 @@ class QrMobileVision {
   }
 
   static Future<List<List<int>>?> getSupportedSizes() {
-    return _channel.invokeMethod('getSupportedSizes').catchError(print) as Future<List<List<int>>?>;
+    return _channel.invokeMethod('getSupportedSizes').catchError(print)
+        as Future<List<List<int>>?>;
   }
 }
 

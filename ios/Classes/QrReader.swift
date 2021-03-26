@@ -104,6 +104,7 @@ class QrReader: NSObject {
   let targetWidth: Int
   let targetHeight: Int
   let textureRegistry: FlutterTextureRegistry
+  let returnValueType: String
   let isProcessing = Atomic<Bool>(false)
   
   var captureDevice: AVCaptureDevice!
@@ -115,11 +116,12 @@ class QrReader: NSObject {
   let cameraPosition = AVCaptureDevice.Position.back
   let qrCallback: (_:String) -> Void
   
-  init(targetWidth: Int, targetHeight: Int, textureRegistry: FlutterTextureRegistry, options: BarcodeScannerOptions, qrCallback: @escaping (_:String) -> Void) throws {
+    init(targetWidth: Int, targetHeight: Int, textureRegistry: FlutterTextureRegistry, options: BarcodeScannerOptions, returnValueType: String, qrCallback: @escaping (_:String) -> Void) throws {
     self.targetWidth = targetWidth
     self.targetHeight = targetHeight
     self.textureRegistry = textureRegistry
     self.qrCallback = qrCallback
+    self.returnValueType = returnValueType
     
     self.barcodeDetector = BarcodeScanner.barcodeScanner()
     
@@ -218,7 +220,7 @@ extension QrReader: AVCaptureVideoDataOutputSampleBufferDelegate {
         }
                 
         for feature in features {
-            self.qrCallback(feature.displayValue!)
+            self.qrCallback("ReturnFormat.DISPLAY".compare(returnValueType, options: .caseInsensitive) == .orderedSame ? feature.displayValue! : feature.rawValue!)
         }
       }
     }

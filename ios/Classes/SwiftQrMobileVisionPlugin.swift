@@ -57,6 +57,7 @@ public class SwiftQrMobileVisionPlugin: NSObject, FlutterPlugin {
       
       guard let targetWidth = argReader.int(key: "targetWidth"),
             let targetHeight = argReader.int(key: "targetHeight"),
+            let returnValueType = argReader.string(key: "returnValueType"),
             let formatStrings = argReader.stringArray(key: "formats") else {
           result(FlutterError(code: "INVALID_ARGUMENT", message: "Missing a required argument", details: "Expecting targetWidth, targetHeight, formats, and optionally heartbeatTimeout"))
           return
@@ -69,6 +70,7 @@ public class SwiftQrMobileVisionPlugin: NSObject, FlutterPlugin {
           targetWidth: targetWidth,
           targetHeight: targetHeight,
           textureRegistry: textureRegistry,
+          returnValueType: returnValueType,
           options: options) { [unowned self] qr in
             self.channel.invokeMethod("qrRead", arguments: qr)
         }
