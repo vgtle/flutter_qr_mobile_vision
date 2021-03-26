@@ -218,7 +218,7 @@ extension QrReader: AVCaptureVideoDataOutputSampleBufferDelegate {
         }
                 
         for feature in features {
-            self.qrCallback(feature.defaultValue!)
+            self.qrCallback(feature.displayValue!)
         }
       }
     }
